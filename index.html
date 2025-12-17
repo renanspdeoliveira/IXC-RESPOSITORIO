@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FuturaNet • Cliente</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <div class="page">
+    <div class="container">
+
+      <header class="header">
+        <div class="brand">FuturaNet</div>
+        <div class="controls">
+          <input id="login" placeholder="Digite o login / ID / Nome do cliente" />
+          <button id="btnBuscar" class="btn">Buscar</button>
+          <span id="msg" class="msg"></span>
+        </div>
+      </header>
+
+      <!-- DADOS DO CLIENTE -->
+      <section class="panel card">
+        <div class="panel-title">Dados do Cliente</div>
+
+        <div class="grid-3">
+          <div class="field"><span>PPPOE:</span><strong id="pppoe">—</strong></div>
+          <div class="field"><span>Senha PPPoE:</span><strong id="senhaPppoe">—</strong></div>
+
+          <div class="field">
+            <span>IPv4:</span>
+            <strong id="ipv4">—</strong>
+            <button id="btnRouter" class="btn-icon hidden" title="Acessar roteador">🔗</button>
+          </div>
+
+          <div class="field"><span>Superadmin:</span><strong id="superadminStatus">—</strong></div>
+          <div class="field"><span>MAC:</span><strong id="mac">—</strong></div>
+          <div class="field"><span>PON / ONU:</span><strong id="ponOnu">—</strong></div>
+          <div class="field"><span>Última conexão:</span><strong id="ultima">—</strong></div>
+          <div class="field"><span>Sinal RX:</span><strong id="rx">—</strong></div>
+          <div class="field"><span>Sinal TX:</span><strong id="tx">—</strong></div>
+          <div class="field"><span>Temperatura:</span><strong id="temp">—</strong></div>
+        </div>
+      </section>
+
+      <!-- ROTEADOR -->
+      <section class="panel">
+        <div class="router-title">ROTEADOR</div>
+        <div class="router-checkboxes">
+          <label><input type="checkbox" value="TL-WR849N"> TL-WR849N</label>
+          <label><input type="checkbox" value="TL-WR949N"> TL-WR949N</label>
+          <label><input type="checkbox" value="TL-WR840N"> TL-WR840N</label>
+          <label><input type="checkbox" value="ARCHER C6"> ARCHER C6</label>
+          <label><input type="checkbox" value="ARCHER C5"> ARCHER C5</label>
+          <label><input type="checkbox" value="EX220"> EX220</label>
+          <label><input type="checkbox" value="EX220V2"> EX220V2</label>
+          <label><input type="checkbox" value="G5"> G5</label>
+        </div>
+      </section>
+
+      <!-- RESUMOS -->
+      <section class="summary">
+        <div class="panel">
+          <div class="panel-title">Atendimentos • 30 dias</div>
+          <div class="big" id="at30">—</div>
+          <div class="small" id="atList">Faça uma busca.</div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">O.S. • 30 dias</div>
+          <div class="big" id="os30">—</div>
+          <div class="small" id="osList">Faça uma busca.</div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  
+
+  <section class="panel">
+    <div class="panel-title">Atendimento</div>
+
+    <button id="btnNovo" class="btn btn-gold">NOVO</button>
+
+    <!-- REGISTRO (começa escondido) -->
+    <div id="novoBox" class="novoBox hidden">
+
+      <div class="row">
+        <label>Relato do Cliente</label>
+        <textarea id="relatoCliente" placeholder="Descreva o que o cliente informou..."></textarea>
+      </div>
+
+      <div class="row">
+        <label>Tratativa</label>
+        <label>
+          <input type="checkbox" id="tratativaPadrao">
+          PADRÃO
+        </label>
+
+        <textarea id="tratativaObs" placeholder="Detalhe o que foi feito na conexão..."></textarea>
+      </div>
+
+      <div class="row">
+        <label>Conclusão</label>
+        <label><input type="checkbox" id="finalizado"> Finalizado</label>
+        <label><input type="checkbox" id="encaminhado"> Encaminhado</label>
+      </div>
+
+      <div class="row">
+        <label>Contato</label>
+        <input id="contato" placeholder="Telefone / WhatsApp" />
+      </div>
+
+      <div class="row">
+        <label>Origem</label>
+        <label><input type="checkbox" value="OPA" class="origem"> OPA</label>
+        <label><input type="checkbox" value="RECLAMACOES" class="origem"> Reclamações</label>
+        <label><input type="checkbox" value="REINCIDENTE" class="origem"> Reincidente</label>
+      </div>
+
+      <button id="btnSalvarAtendimento" class="btn btn-gold">
+        SALVAR ATENDIMENTO
+      </button>
+
+      <div id="resultadoAtendimento" class="small"></div>
+    </div>
+  </section>
+
+
+  <script src="/app.js"></script>
+
+ 
+<!-- MODAL -->
+<div id="modalNovo" class="modal hidden">
+  <div class="modal-header">
+    <span>Novo Atendimento</span>
+    <button id="btnFecharModal">✕</button>
+  </div>
+
+  <div class="modal-body">
+    <textarea placeholder="Teste modal funcionando..."></textarea>
+  </div>
+</div>
+
+
+<!-- OVERLAY -->
+<div id="modalOverlay" class="modal-overlay hidden"></div>
+
+<!-- MODAL NOVO ATENDIMENTO -->
+<div id="modalNovo" class="modal hidden">
+
+  <div class="modal-header">
+    <span>Novo Atendimento</span>
+    <button id="btnFecharModal">✕</button>
+  </div>
+
+  <div class="modal-body">
+
+    <!-- RELATO ANTERIOR -->
+    <div class="row">
+      <label>Relato anterior</label>
+      <textarea id="relatoAnterior" placeholder="(opcional)"></textarea>
+    </div>
+
+    <!-- RELATO DO CLIENTE -->
+    <div class="row">
+      <label>Relato do cliente *</label>
+      <textarea id="relatoCliente" placeholder="Descreva o que o cliente informou..."></textarea>
+    </div>
+
+    <!-- TRATATIVA -->
+    <div class="row">
+      <label>Tratativa</label>
+      <label class="check">
+        <input type="checkbox" id="tratativaPadrao">
+        Tratativa padrão
+      </label>
+
+      <textarea id="tratativaObs"
+        placeholder="Obs: detalhe o que foi feito na conexão..."></textarea>
+    </div>
+
+    <!-- ROTEADOR -->
+    <div class="row">
+      <label>Equipamento (roteador)</label>
+      <div class="router-checkboxes">
+        <label><input type="checkbox" value="TL-WR849N"> TL-WR849N</label>
+        <label><input type="checkbox" value="TL-WR949N"> TL-WR949N</label>
+        <label><input type="checkbox" value="TL-WR840N"> TL-WR840N</label>
+        <label><input type="checkbox" value="ARCHER C6"> ARCHER C6</label>
+        <label><input type="checkbox" value="ARCHER C5"> ARCHER C5</label>
+        <label><input type="checkbox" value="EX220"> EX220</label>
+        <label><input type="checkbox" value="EX220V2"> EX220V2</label>
+        <label><input type="checkbox" value="G5"> G5</label>
+      </div>
+    </div>
+
+    <!-- CONTATO -->
+    <div class="row">
+      <label>Contato</label>
+      <input id="contato" placeholder="(16) 99999-9999">
+    </div>
+
+    <!-- CONCLUSÃO -->
+    <div class="row">
+      <label>Conclusão</label>
+      <label class="check">
+        <input type="radio" name="conclusao" value="Finalizado"> Finalizado
+      </label>
+      <label class="check">
+        <input type="radio" name="conclusao" value="Encaminhado"> Encaminhado
+      </label>
+    </div>
+
+    <!-- TENTATIVA DE LIGAÇÃO -->
+    <div class="row">
+      <label>Tentativa de ligação</label>
+      <label class="check">
+        <input type="radio" name="ligacao" value="SIM"> SIM
+      </label>
+      <label class="check">
+        <input type="radio" name="ligacao" value="NÃO"> NÃO
+      </label>
+    </div>
+
+    <!-- ORIGEM -->
+    <div class="row">
+      <label>Origem</label>
+      <label class="check"><input type="checkbox" value="OPA" class="origem"> OPA</label>
+      <label class="check"><input type="checkbox" value="RECLAMAÇÕES" class="origem"> Reclamações</label>
+      <label class="check"><input type="checkbox" value="REINCIDENTE" class="origem"> Reincidente</label>
+    </div>
+
+    <button id="btnSalvarAtendimento" class="btn btn-gold">
+      SALVAR ATENDIMENTO
+    </button>
+
+    <pre id="previewAtendimento" class="preview"></pre>
+
+  </div>
+</div>
+
+
+  
+</body>
+
+</html>
